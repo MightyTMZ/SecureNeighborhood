@@ -24,6 +24,7 @@ CustomUser._meta.get_field('user_permissions').remote_field.related_name = 'cust
 
 
 class Address(models.Model):
+    house_number = models.CharField(max_length=50)
     street = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
     zip = models.CharField(max_length=255)
