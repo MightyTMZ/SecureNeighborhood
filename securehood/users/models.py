@@ -21,3 +21,21 @@ class CustomUser(AbstractUser):
 # Add related names to avoid clashes with auth.User model
 CustomUser._meta.get_field('groups').remote_field.related_name = 'custom_user_groups'
 CustomUser._meta.get_field('user_permissions').remote_field.related_name = 'custom_user_permissions'
+
+
+class Address(models.Model):
+    street = models.CharField(max_length=255)
+    city = models.CharField(max_length=255)
+    zip = models.CharField(max_length=255)
+
+
+class CommunityMember(models.Model):
+    address = models.ForeignKey(Address, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+
+
+class CommunityMemberEndorsement(models.Model):
+    community_member = models.ForeignKey(CommunityMember, on_delete=models.CASCADE) # the person who endorses the user that wants to join the community
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE) # the actual user that wants to join the community
+
+# endorsements are key to ensure that every user is validated upon requesting to join a community. We do not want outsiders randomly joining in
